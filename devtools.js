@@ -1,3 +1,4 @@
+console.log("Start Starlight devtools!");
 /*
 chrome.devtools.panels.create(
     "Starlight",
@@ -9,36 +10,52 @@ chrome.devtools.panels.create(
     }
 );
 */
+var starlightSidebar;
+
+function updateSidebar(contents) {
+    starlightSidebar.setObject({outerHTML: contents.outerHTML});
+}
+
 chrome.devtools.panels.elements.createSidebarPane("Starlight",
     function(sidebar) {
+        sidebar.setPage("html/sidebar.html");
+        starlightSidebar = sidebar;
         // add listener to Elements Panel
-        chrome.devtools.panels.elements.onSearch.addListener(function(action, queryString) {
-            console.log("Action: ", action, ", query: ", queryString);
+        chrome.devtools.panels.elements.onSelectionChanged.addListener(function() {
+            //sidebar.setExpression("(" + getSelectedElement.toString() + ")()");
+            chrome.devtools.inspectedWindow.eval("setSelectedElement($0)", {useContentScriptContext: true});
         });
         // sidebar initialization code here
-        sidebar.setObject({ some_data: "Some data to show" });
+        //sidebar.setObject({ some_data: "Some data to show" });
 });
 
-/*
+// executed in the inspected page scope
+function getSelectedElement() {
+    if ($0) {
+        return {tag: $0.outerHTML};
+    } else return {};
+}
 // DevTools page -- devtools.js
 // Create a connection to the background page
+console.log("Connect to the background");
 var backgroundPageConnection = chrome.runtime.connect({
     name: "devtools-page"
 });
 
-backgroundPageConnection.onMessage.addListener(function (message) {
-    // Handle responses from the background page, if any
+backgroundPageConnection.onMessage.addListener(function(message) {
+    console.log("Message from background: ", message);
 });
 
-// Relay the tab ID to the background page
+/*
 chrome.runtime.sendMessage({
     tabId: chrome.devtools.inspectedWindow.tabId,
-    scriptToInject: "content_script.js"
-});
-
-onShown.addListener(function callback)
-extensionPanel.onShown.addListener(function (extPanelWindow) {
-    extPanelWindow instanceof Window; // true
-    extPanelWindow.postMessage( // …
+    scriptToInject: "inject.js"
+}, function(response) {
+    console.log("Response: ", response);
 });
 */
+backgroundPageConnection.postMessage({
+    command: "init",
+    tabId: chrome.devtools.inspectedWindow.tabId,
+    scriptToInject: "inject.js"
+})

@@ -5,6 +5,16 @@
     "description": "This extension allows to pick out the web source and embed your own site",
     "version": "0.1",
     "minimum_chrome_version": "10.0",
-    "devtools_page": "devtools.html"
 
+    "devtools_page": "devtools.html",
+
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+
+    "permissions": [
+        "tabs",
+        "<all_urls>"
+    ]
 }
