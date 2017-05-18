@@ -12,6 +12,13 @@
         "scripts": ["background.js"],
         "persistent": false
     },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content-script.js"],
+            "all_frames": true
+        }
+    ],
 
     "permissions": [
         "tabs",
