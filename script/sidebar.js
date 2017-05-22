@@ -6,32 +6,28 @@ var backgroundPageConnection = chrome.runtime.connect({
     name: "devtools-page"
 });
 
+// Listener for message from background script (background.js)
 backgroundPageConnection.onMessage.addListener(function(message) {
     console.log("Message from background: ", message);
+    switch(message.command) {
+        case "html":
+        {
+            //$("#input-xpath")
+            //$("#sample").text(message.data);
+            document.getElementById("sample").innerHTML = message.data;
+        }
+        break;
+        default:
+    }
 });
 
+// Send request for initialize injected script to the background
 backgroundPageConnection.postMessage({
     command: "init",
     tabId: chrome.devtools.inspectedWindow.tabId,
     scriptToInject: "inject.js"
 });
 
-
-// function getSelectedElement() {
-//     return $0;
-// }
-
 chrome.devtools.panels.elements.onSelectionChanged.addListener(function() {
     chrome.devtools.inspectedWindow.eval("setSelectedElement($0)", {useContentScriptContext: true});
-    // chrome.devtools.inspectedWindow.eval("("+getSelectedElement+")()", function(result, err) {
-    //     if (err) throw result;
-
-    //     console.log(result);
-    // });
 });
-
-/*
-chrome.runtime.onMessage.addListener(function(req, sender) {
-    console.log("Request arrived. request: ", req, ", sender: ", sender);
-});
-*/

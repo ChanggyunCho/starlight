@@ -31,6 +31,9 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
     if (sender.tab) {
         var senderTabId = sender.tab.id;
         console.log("Relay message from ", senderTabId, "request: ", req);
+        if (connections[senderTabId]) {
+            connections[senderTabId].postMessage(req);
+        }
     }
     return true;
 });
