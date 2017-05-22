@@ -14,7 +14,8 @@ backgroundPageConnection.onMessage.addListener(function(message) {
         {
             //$("#input-xpath")
             //$("#sample").text(message.data);
-            document.getElementById("sample").innerHTML = message.data;
+            document.getElementById("sample").innerHTML = message.data.html;
+            document.getElementById("input-xpath").value = message.data.xpath;
         }
         break;
         default:
