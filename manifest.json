@@ -21,6 +21,7 @@
     ],
     "permissions": [
         "tabs",
-        "<all_urls>"
+        "<all_urls>",
+        "https://htmlpartitionsync.azurewebsites.net/api/PartitionJs"
     ]
 }

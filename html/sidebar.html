@@ -1,12 +1,17 @@
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-    <input type="button">Create Embed Code</input>
+    <input type="button" id="button-create">Create Embed Code</input>
     <h1> Hello World! </h1>
-    <label for="xpath">XPath</label>
+    <label for="url">URL: </label>
+    <input type="text" id="input-url"></input>
+    <br>
+    <label for="xpath">XPath: </label>
     <input type="text" id="input-xpath" disabled></input>
+    <br>
+    <label for="script">Embed Code: </label>
+    <input type="text" id="input-embed" disabled></input>
     <br>
     <label for="sample">Sample</label>
     <div id="sample"></div>

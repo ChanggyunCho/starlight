@@ -19,6 +19,15 @@ chrome.runtime.onConnect.addListener(function(devToolsConnection) {
                 devToolsConnection.onMessage.removeListener(devToolsListener);
                 delete connections[message.tabId];
             });
+
+            // send url of current tab
+            // comment out: tabs.query is not stable on developer mode
+            // https://bugs.chromium.org/p/chromium/issues/detail?id=462939
+            /*
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                devToolsConnection.postMessage({command: "url", data: tabs[0].url});
+            });
+            */
         }
     }
     // add the listener
