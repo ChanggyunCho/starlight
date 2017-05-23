@@ -6,6 +6,8 @@ var backgroundPageConnection = chrome.runtime.connect({
     name: "devtools-page"
 });
 
+var styleElements = {};
+
 // Add event listener to the button
 document.getElementById("button-create").addEventListener("click", function() {
     var xpath = document.getElementById("input-xpath").value;
@@ -40,6 +42,23 @@ document.getElementById("button-copy-embed").addEventListener("click", function(
     }
 });
 
+function getStyleTag() {
+    let tag = "";
+    if (styleElements.style) {
+        styleElements.style.forEach(function(style) {
+            tag += style;
+            tag += "\n";
+        });
+    }
+    if (styleElements.styleLink) {
+        styleElements.styleLink.forEach(function(link) {
+            tag += link;
+            tag += "\n";
+        });
+    }
+    return tag;
+}
+
 // Listener for message from background script (background.js)
 backgroundPageConnection.onMessage.addListener(function(message) {
     console.log("Message from background: ", message);
@@ -48,13 +67,21 @@ backgroundPageConnection.onMessage.addListener(function(message) {
         {
             //$("#input-xpath")
             //$("#sample").text(message.data);
-            document.getElementById("sample").innerHTML = message.data.html;
+            let html = getStyleTag() + message.data.html;
+            document.getElementById("textarea-tag").textContent = html;
+            document.getElementById("sample").innerHTML = html;
             document.getElementById("input-xpath").value = message.data.xpath;
         }
         break;
         case "url":
         {
             document.getElementById("input-url").value = message.data;
+        }
+        break;
+        case "style":
+        {
+            styleElements.style = message.data.style;
+            styleElements.styleLink = message.data.link;
         }
         break;
         default:

@@ -111,8 +111,38 @@ function setSelectedElement(selected) {
             data: {
                 html: html,
                 xpath: xpath
+                // style: styles,
+                // linkArray: linkArray
             },
             source: "starlight-injected"
         }, '*');
     }
 }
+
+function sendStyles() {
+    console.log("Send styles to the background");
+    let styles = [];
+    let styleTags = document.getElementsByTagName("style");
+    for (let i = 0; i < styleTags.length; ++i) {
+        styles.push(styleTags[i].outerHTML);
+    };
+    let links = [];
+    let linkTags = document.getElementsByTagName("link");
+    for (let i = 0; i < linkTags.length; ++i) {
+        // filter <link rel="stylesheet" ...>
+        let attr = linkTags[i].getAttribute("rel");
+        if (attr && attr === "stylesheet") {
+            links.push(linkTags[i].outerHTML);
+        }
+    }
+
+    window.postMessage({
+        command: "style",
+        data: {
+            style: styles,
+            link: links
+        },
+        source: "starlight-injected"
+    }, '*');
+}
+sendStyles();
