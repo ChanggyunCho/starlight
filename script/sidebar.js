@@ -15,6 +15,7 @@ document.getElementById("button-create").addEventListener("click", function() {
         var requestUrl = "https://htmlpartitionsync.azurewebsites.net/api/PartitionJs?url=" + encodeURIComponent(url) + "&xpath=" + encodeURIComponent(xpath);
         var embedCode = "<script src=\"" + requestUrl + "\"></script>";
         document.getElementById("input-embed").value = embedCode;
+        // document.getElementById("input-embed").textContent = embedCode;
         /*
         // Call GET method
         console.log("Call XHR: ", requestUrl);
@@ -27,6 +28,15 @@ document.getElementById("button-create").addEventListener("click", function() {
         };
         xhr.send();
         */
+    }
+});
+
+document.getElementById("button-copy-embed").addEventListener("click", function() {
+    let inputField = document.getElementById("input-embed");
+    if (inputField.value) {
+        // copy to clipboard
+        inputField.select();
+        document.execCommand('copy');
     }
 });
 
